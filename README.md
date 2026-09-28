@@ -61,6 +61,7 @@ pinned: false
   * [🐙 Heroku](#-heroku-guide)
   * [🐳 VPS (recommended)](#-vps-guide-recommended)
   * [🤗 Hugging Face](#-hugging-face-guide-free-always-online-no-vps)
+  * [☁️ Cloudflare streaming (optional)](#️-cloudflare-streaming-optional)
 * [📺 Watch in Nuvio / Stremio](#-watch-in-nuvio--stremio)
 * [🏅 Contributors](#-contributors)
 
@@ -861,6 +862,25 @@ In **your forked repo** → **Actions** → select **Deploy to Hugging Face Spac
 2. Fill in the **TMDB API** key and **AUTH channels**.
 3. For everything else, see [Web Settings Page](#️-web-settings-page-every-option-explained).
 4. Save and enjoy.
+
+---
+
+## ☁️ Cloudflare streaming (optional)
+
+Streaming video is what makes a server expensive. With a Cloudflare streaming Worker, the video
+bytes go through Cloudflare instead, while this app keeps catalogs, tokens and limits. A small
+free host such as Hugging Face is then enough for the app.
+
+If you've been given a Worker URL and secret, open **Settings → Cloudflare Streaming**:
+
+* **Worker URL**: the Worker's address, for example `https://telestream-you.workers.dev`
+* **Shared Secret**: the secret that came with it
+* **Stremio Links**: **Both** while you test (Stremio lists an extra "(Cloudflare)" stream),
+  then **Cloudflare only**
+
+Save. Your bots must be in your channels, as they already are. The Worker loads your bot tokens
+from the app, so you don't enter them twice. Usage per token is reported back every 30 seconds,
+so daily and monthly limits keep working.
 
 ---
 

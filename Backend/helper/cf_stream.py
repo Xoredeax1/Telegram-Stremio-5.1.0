@@ -1,0 +1,44 @@
+import hashlib
+import hmac
+import time
+
+from Backend.helper.settings_manager import SettingsManager
+
+#----- Signed Cloudflare links stay valid this long. The Worker can't read the token DB, so a
+#----- revoked or expired token keeps streaming on Cloudflare until its links run out.
+LINK_TTL = 48 * 3600
+
+#----- Max clock skew accepted on requests signed by the Worker
+REQUEST_MAX_AGE = 300
+
+
+def cf_enabled() -> bool:
+    s = SettingsManager.current()
+    return s.cf_stream_mode != "off" and bool(s.cf_stream_url and s.cf_stream_secret)
+
+
+def _hmac(secret: str, message: str) -> str:
+    return hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
+
+
+#----- Cloudflare twin of a /dl/{token}/{id}/{name} link. Only /dl/{token}/{id} and the expiry
+#----- are signed, so players re-encoding the file name don't break the signature.
+def cf_stream_url(token: str, file_id: str, name: str) -> str:
+    s = SettingsManager.current()
+    exp = int(time.time()) + LINK_TTL
+    sig = _hmac(s.cf_stream_secret, f"/dl/{token}/{file_id}:{exp}")[:32]
+    return f"{s.cf_stream_url}/dl/{token}/{file_id}/{name}?e={exp}&s={sig}"
+
+
+#----- Check a Worker -> app request signed as HMAC(secret, "{ts}\n{METHOD} {path}\n{body}")
+def verify_worker_request(method: str, path: str, body: bytes, ts: str, sig: str) -> bool:
+    secret = SettingsManager.current().cf_stream_secret
+    if not secret or not ts or not sig:
+        return False
+    try:
+        if abs(time.time() - int(ts)) > REQUEST_MAX_AGE:
+            return False
+    except ValueError:
+        return False
+    expected = _hmac(secret, f"{ts}\n{method} {path}\n{body.decode('utf-8', 'replace')}")
+    return hmac.compare_digest(expected, sig)

@@ -892,7 +892,28 @@ If Telegram-Stremio is useful to you, you can support its development here:
 
 ## 🏅 Contributors
 
-|<img width="80" src="https://avatars.githubusercontent.com/u/113664541">|<img width="80" src="https://avatars.githubusercontent.com/u/13152917">|<img width="80" src="https://avatars.githubusercontent.com/u/14957082">|<img width="80" src="https://raw.githubusercontent.com/vflixa1prime/Readme/main/VFlixPRime.png">|
-|:---:|:---:|:---:|:---:|
-|[`Karan`](https://github.com/Weebzone)|[`Stremio`](https://github.com/Stremio)|[`ChatGPT`](https://github.com/OPENAI)|[`VFlix Prime`](https://t.me/vflixprime2)|
-|Author|Stremio SDK|Refactor|Community Support|
+<div align="center">
+
+<a href="https://github.com/weebzone"><img src="https://avatars.githubusercontent.com/u/113664541?s=192" width="96" alt="Karan" /></a>
+
+**[Karan](https://github.com/weebzone)**<br />
+<sub>Author &amp; maintainer</sub>
+
+<br />
+
+<table>
+  <tr>
+    <td align="center" width="170">
+      <a href="https://github.com/Stremio"><img src="https://avatars.githubusercontent.com/u/13152917?s=128" width="64" alt="Stremio" /><br /><b>Stremio</b></a><br />
+      <sub>Addon SDK</sub>
+    </td>
+    <td align="center" width="170">
+      <a href="https://github.com/openai"><img src="https://avatars.githubusercontent.com/u/14957082?s=128" width="64" alt="ChatGPT" /><br /><b>ChatGPT</b></a><br />
+      <sub>Refactoring</sub>
+    </td>
+  </tr>
+</table>
+
+<sub>Want to help? Open an issue or a pull request.</sub>
+
+</div>

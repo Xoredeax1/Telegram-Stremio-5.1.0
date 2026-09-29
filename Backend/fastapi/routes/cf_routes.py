@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Request
 from Backend import db
 from Backend.config import Telegram
 from Backend.helper.analytics import record_stream_start
+from Backend.helper.cf_live import apply_report
 from Backend.helper.cf_stream import verify_worker_request
 from Backend.helper.session_auth import get_active_session_string
 from Backend.helper.settings_manager import SettingsManager
@@ -61,4 +62,10 @@ async def cf_usage(request: Request):
             token_data = await db.get_api_token(token)
             names[token] = token_data.get("name") if token_data else None
         await record_stream_start(token, names[token], str(start.get("ip") or ""), str(start.get("ua") or ""))
+    #----- Live streams, so dashboards and user activity show Cloudflare streams too
+    if isinstance(data.get("streams"), list) and data.get("member"):
+        try:
+            await apply_report(str(data["member"]), data.get("client_index"), data.get("dc"), data["streams"])
+        except Exception as e:
+            LOGGER.error(f"[CF] Live stream report failed: {e}")
     return {"ok": True}

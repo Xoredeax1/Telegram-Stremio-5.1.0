@@ -453,6 +453,11 @@ class SettingsManager:
         if any(old.get(k) != new.get(k) for k in cf_keys):
             results["cloudflare"] = "updated — new stream links use it right away"
 
+        #----- Bot tokens or Cloudflare settings changed: have the Worker reload them now
+        if old_tokens != new_tokens or any(old.get(k) != new.get(k) for k in cf_keys):
+            from Backend.helper.cf_stream import sync_worker_soon
+            sync_worker_soon()
+
         #----- Subscription enabled/disabled: start or stop the checker task
         if old.get("subscription") != new.get("subscription"):
             try:

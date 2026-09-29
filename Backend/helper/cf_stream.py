@@ -1,8 +1,12 @@
+import asyncio
 import hashlib
 import hmac
 import time
 
+import httpx
+
 from Backend.helper.settings_manager import SettingsManager
+from Backend.logger import LOGGER
 
 #----- Signed Cloudflare links stay valid this long. The Worker can't read the token DB, so a
 #----- revoked or expired token keeps streaming on Cloudflare until its links run out.
@@ -42,3 +46,24 @@ def verify_worker_request(method: str, path: str, body: bytes, ts: str, sig: str
         return False
     expected = _hmac(secret, f"{ts}\n{method} {path}\n{body.decode('utf-8', 'replace')}")
     return hmac.compare_digest(expected, sig)
+
+
+#----- Ask the Worker to reload bot tokens / the userbot session now instead of within 10 minutes
+async def notify_worker() -> None:
+    if not cf_enabled():
+        return
+    s = SettingsManager.current()
+    ts, body = str(int(time.time())), "{}"
+    headers = {"x-cf-time": ts, "x-cf-sig": _hmac(s.cf_stream_secret, f"{ts}\nPOST /api/sync\n{body}"), "content-type": "application/json"}
+    try:
+        async with httpx.AsyncClient(timeout=20) as client:
+            r = await client.post(f"{s.cf_stream_url}/api/sync", content=body, headers=headers)
+        if r.status_code != 200:
+            LOGGER.warning(f"[CF] Worker sync failed: HTTP {r.status_code} {r.text[:200]}")
+    except Exception as e:
+        LOGGER.warning(f"[CF] Worker sync failed: {e}")
+
+
+#----- Fire-and-forget: never delays the save or login that triggered it
+def sync_worker_soon() -> None:
+    asyncio.create_task(notify_worker())

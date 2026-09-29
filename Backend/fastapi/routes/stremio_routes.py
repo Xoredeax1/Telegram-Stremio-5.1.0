@@ -36,7 +36,8 @@ ADDON_VERSION = __version__
 PAGE_SIZE = 15
 
 def _donation():
-    return {"name": "⭐ Donation needed.", "title": "Click here to donate to keep the project alive.", "externalUrl": "https://donate.weebzonex.workers.dev"}
+    text = "Enjoying TeleStremio?\nTap to support the developer"
+    return {"name": "❤️ Support", "title": text, "description": text, "externalUrl": "https://donate.weebzonex.workers.dev"}
 
 def build_proxy_url(original_url: str) -> str | None:
     settings = SettingsManager.current()
@@ -1120,7 +1121,7 @@ async def get_streams(
         if name_count[s["name"]] > 1:
             seen[s["name"]] = seen.get(s["name"], 0) + 1
             s["name"] = f"{s['name']} ({seen[s['name']]})"
-    streams.insert(0, _donation())
+    streams.append(_donation())
     return {"streams": streams}
 
 #----- Configure/install landing page rendered as HTML for a token

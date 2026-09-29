@@ -1015,6 +1015,13 @@ document.addEventListener('DOMContentLoaded', sessLoadStatus);
             Stream video from a Cloudflare streaming Worker instead of this server. Catalogs, tokens and
             limits stay here; the Worker reports each token's usage back. Enter the URL and secret you were given.
         </p>
+        <a href="https://proxy.weebzonex.workers.dev" target="_blank" rel="noopener" class="add-btn" style="display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1rem;text-decoration:none">
+            <i class="fa-solid fa-bolt"></i> Get Cloudflare streaming (₹50 / $5)
+        </a>
+        <p style="font-size:0.75rem;color:var(--text-sec);margin:-0.5rem 0 1rem">
+            Recommended on free hosts (Koyeb, Render, orkestr): video then streams fast from Cloudflare instead of a slow, sleeping free server.
+            After buying, you get the Worker URL and secret on Telegram.
+        </p>
         <div style="margin-bottom:1rem">
             <label class="s-label" for="cf_stream_url">Worker URL</label>
             <input type="url" id="cf_stream_url" class="s-input"
@@ -1023,17 +1030,10 @@ document.addEventListener('DOMContentLoaded', sessLoadStatus);
         </div>
         <div style="margin-bottom:1rem">
             <label class="s-label" for="cf_stream_secret">Shared Secret</label>
-            <div style="position:relative">
-                <input type="password" id="cf_stream_secret" class="s-input"
-                    value="{{ settings.cf_stream_secret }}"
-                    placeholder="Same value as the Worker's STREAM_SECRET"
-                    style="padding-right:2.5rem" autocomplete="off" spellcheck="false">
-                <button type="button" onclick="generateCfSecret()" title="Generate a random secret"
-                    style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);
-                           background:none;border:none;color:var(--text-sec);cursor:pointer">
-                    <i class="fa-solid fa-dice"></i>
-                </button>
-            </div>
+            <input type="password" id="cf_stream_secret" class="s-input"
+                value="{{ settings.cf_stream_secret }}"
+                placeholder="The secret that came with your Worker URL"
+                autocomplete="off" spellcheck="false">
         </div>
         <div>
             <label class="s-label" for="cf_stream_mode">Stremio Links</label>
@@ -1333,14 +1333,6 @@ function togglePwdVisibility() {
 }
 
 /* ── Session secret generator ─────────────────────────────────────────── */
-function generateCfSecret() {
-    const bytes = new Uint8Array(32);
-    crypto.getRandomValues(bytes);
-    const input = document.getElementById('cf_stream_secret');
-    input.value = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
-    input.type = 'text';
-}
-
 function generateSessionSecret() {
     const bytes = new Uint8Array(32);
     crypto.getRandomValues(bytes);

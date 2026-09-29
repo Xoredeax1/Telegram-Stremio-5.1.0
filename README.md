@@ -808,7 +808,7 @@ No VPS needed. All three build this repo's `Dockerfile` for you. You fill in the
 | `DATABASE` | 2 MongoDB URIs, comma-separated (tracking, storage) |
 
 > ⚡ **Free servers are slow at streaming and go to sleep when idle.** For fast, smooth playback,
-> [get Cloudflare streaming (₹50 / $5)](https://proxy.weebzonex.workers.dev): video then streams from Cloudflare while this app
+> [get Cloudflare streaming](https://proxy.weebzonex.workers.dev): video then streams from Cloudflare while this app
 > only serves your catalogs. See [Cloudflare streaming](#️-cloudflare-streaming-optional).
 
 ### Koyeb
@@ -850,7 +850,7 @@ Streaming video is what makes a server expensive. With a Cloudflare streaming Wo
 bytes go through Cloudflare instead, while this app keeps catalogs, tokens and limits. A small
 free host (Koyeb, Render, orkestr) is then enough for the app, and playback is fast.
 
-**[Get Cloudflare streaming (₹50 / $5)](https://proxy.weebzonex.workers.dev)**. After paying you receive a Worker URL and a
+**[Get Cloudflare streaming](https://proxy.weebzonex.workers.dev)**. After paying you receive a Worker URL and a
 secret on Telegram. Then open **Settings → Cloudflare Streaming**:
 
 * **Worker URL**: the Worker's address, for example `https://telestream-you.workers.dev`

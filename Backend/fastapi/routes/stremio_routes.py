@@ -36,7 +36,7 @@ ADDON_VERSION = __version__
 PAGE_SIZE = 15
 
 def _donation():
-    text = "Enjoying TeleStremio?\nTap to support the developer"
+    text = "Enjoying Telegram Stremio?\nTap to support the developer"
     return {"name": "❤️ Support", "title": text, "description": text, "externalUrl": "https://donate.weebzonex.workers.dev"}
 
 def build_proxy_url(original_url: str) -> str | None:

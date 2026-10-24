@@ -220,7 +220,7 @@ async def file_receive_handler(client: Client, message: Message):
         if not (session and session.get("kind") == "real"):
             return
     elif str(message.chat.id) not in SettingsManager.current().auth_channels:
-        await message.reply_text("> Channel is not in AUTH_CHANNEL")
+        #await message.reply_text("> Channel is not in AUTH_CHANNEL")
         return
 
     is_real_session = bool(session and session.get("kind") == "real")
